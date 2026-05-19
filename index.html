@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Agustín Servicios Generales — Málaga · Costa del Sol · Algarve</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+/* ─────────────────── TOKENS ─────────────────── */
+:root{
+  --y:#F5C518;--yl:#FFD84D;--yd:rgba(245,197,24,.14);--yb:rgba(245,197,24,.3);
+  --bk:#060606;--ink:#0B0B0B;--s1:#111;--s2:#181818;--s3:#1F1F1F;
+  --br:rgba(255,255,255,.06);--br2:rgba(255,255,255,.1);
+  --tx:rgba(255,255,255,.9);--mu:rgba(255,255,255,.42);--fa:rgba(255,255,255,.08);
+  --wh:#fff;
+  --r:8px;--r2:14px;--r3:20px;
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;font-size:16px;}
+body{font-family:'Inter',sans-serif;background:var(--bk);color:var(--tx);overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+a{color:inherit;text-decoration:none;}
+img{display:block;max-width:100%;}
+button{font-family:'Inter',sans-serif;}
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-thumb{background:var(--y);border-radius:2px;}
+
+/* ─────────────────── CURSOR ─────────────────── */
+.cur{position:fixed;pointer-events:none;z-index:9999;mix-blend-mode:difference;}
+.cur-dot{width:8px;height:8px;background:var(--wh);border-radius:50%;transform:translate(-50%,-50%);}
+.cur-ring{width:36px;height:36px;border:1.5px solid rgba(255,255,255,.45);border-radius:50%;transform:translate(-50%,-50%);transition:width .3s var(--ease),height .3s var(--ease),opacity .2s;}
+body:has(a:hover) .cur-ring,body:has(button:hover) .cur-ring{width:52px;height:52px;opacity:.7;}
+
+/* ─────────────────── REVEAL ─────────────────── */
+.reveal{opacity:0;transform:translateY(32px);transition:opacity .8s var(--ease),transform .8s var(--ease);}
+.reveal.in{opacity:1;transform:none;}
+.reveal-l{opacity:0;transform:translateX(-28px);transition:opacity .7s var(--ease),transform .7s var(--ease);}
+.reveal-l.in{opacity:1;transform:none;}
+.reveal-r{opacity:0;transform:translateX(28px);transition:opacity .7s var(--ease),transform .7s var(--ease);}
+.reveal-r.in{opacity:1;transform:none;}
+.d1{transition-delay:.1s!important;}
+.d2{transition-delay:.2s!important;}
+.d3{transition-delay:.3s!important;}
+.d4{transition-delay:.4s!important;}
+.d5{transition-delay:.5s!important;}
+
+/* ─────────────────── NAV ─────────────────── */
+nav{
+  position:fixed;inset:0 0 auto;z-index:500;
+  height:68px;display:flex;align-items:center;justify-content:space-between;
+  padding:0 5.5%;
+  background:rgba(6,6,6,0);
+  transition:background .4s,border-color .4s,backdrop-filter .4s;
+  border-bottom:1px solid transparent;
+}
+nav.scr{background:rgba(6,6,6,.96);border-color:var(--br);backdrop-filter:blur(20px);}
+.nlogo{display:flex;align-items:center;gap:12px;cursor:pointer;}
+.nmark{
+  width:36px;height:36px;background:var(--y);border-radius:7px;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  position:relative;overflow:hidden;
+}
+.nmark::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.25),transparent);}
+.nmark svg{width:18px;height:18px;position:relative;z-index:1;}
+.nname{font-family:'Oswald',sans-serif;font-size:17px;font-weight:600;letter-spacing:1px;text-transform:uppercase;line-height:1.1;}
+.ntag{font-size:8.5px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:var(--y);margin-top:1px;}
+.nlinks{display:flex;gap:32px;list-style:none;}
+.nlinks a{font-size:12px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--mu);transition:color .2s;position:relative;}
+.nlinks a::after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:1px;background:var(--y);transition:width .2s;}
+.nlinks a:hover{color:var(--wh);}
+.nlinks a:hover::after{width:100%;}
+.nright{display:flex;align-items:center;gap:9px;}
+.lsw{display:flex;background:var(--s2);border:1px solid var(--br);border-radius:20px;padding:3px;gap:2px;}
+.lb{border:none;background:none;color:var(--mu);font-size:10.5px;font-weight:700;letter-spacing:1px;padding:5px 10px;border-radius:14px;cursor:pointer;transition:all .18s;}
+.lb.on{background:var(--y);color:var(--bk);}
+.ncta{
+  background:var(--y);color:var(--bk);border:none;
+  padding:10px 20px;border-radius:6px;
+  font-weight:700;font-size:12px;letter-spacing:1px;text-transform:uppercase;
+  cursor:pointer;transition:all .2s;
+}
+.ncta:hover{background:var(--yl);box-shadow:0 0 20px rgba(245,197,24,.35);}
+.hbg{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:8px;margin-right:-8px;}
+.hbg span{display:block;width:22px;height:2px;background:var(--wh);transition:all .3s;border-radius:1px;}
+
+/* ─────────────────── MOBILE MENU ─────────────────── */
+.mmenu{position:fixed;inset:0;background:var(--ink);z-index:600;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;opacity:0;pointer-events:none;transition:opacity .28s;}
+.mmenu.on{opacity:1;pointer-events:all;}
+.mlink{font-family:'Oswald',sans-serif;font-size:38px;font-weight:600;text-transform:uppercase;letter-spacing:2px;color:var(--mu);padding:14px 0;border-bottom:1px solid var(--br);width:68%;text-align:center;transition:color .2s;}
+.mlink:hover{color:var(--y);}
+.mclose{position:absolute;top:18px;right:20px;background:none;border:none;color:var(--mu);font-size:24px;cursor:pointer;width:36px;height:36px;}
+
+/* ─────────────────── HERO ─────────────────── */
+#hero{
+  min-height:100vh;display:grid;place-items:center;
+  padding:100px 5.5% 80px;
+  position:relative;overflow:hidden;
+  background:var(--bk);
+}
+.hero-bg-img{
+  position:absolute;inset:0;
+  background-image:url('https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?w=1400&q=60');
+  background-size:cover;background-position:center;
+  opacity:.06;
+  pointer-events:none;
+}
+.hero-orb{
+  position:absolute;top:-10%;left:-5%;
+  width:600px;height:600px;border-radius:50%;
+  background:radial-gradient(circle,rgba(245,197,24,.07) 0%,transparent 70%);
+  pointer-events:none;animation:orb 8s ease-in-out infinite alternate;
+}
+.hero-orb2{
+  position:absolute;bottom:-20%;right:-10%;
+  width:500px;height:500px;border-radius:50%;
+  background:radial-gradient(circle,rgba(245,197,24,.04) 0%,transparent 70%);
+  pointer-events:none;animation:orb 10s ease-in-out infinite alternate-reverse;
+}
+@keyframes orb{0%{transform:translate(0,0)scale(1);}100%{transform:translate(40px,30px)scale(1.1);}}
+.hero-lines{
+  position:absolute;inset:0;
+  background-image:linear-gradient(rgba(245,197,24,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(245,197,24,.025) 1px,transparent 1px);
+  background-size:80px 80px;
+  pointer-events:none;
+}
+.hero-inner{
+  position:relative;z-index:2;
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:0;align-items:center;width:100%;max-width:1300px;
+}
+.hero-left{padding-right:6%;}
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:10px;
+  font-size:10.5px;font-weight:700;letter-spacing:3px;text-transform:uppercase;
+  color:var(--y);margin-bottom:28px;
+}
+.hero-eyebrow::before{content:'';width:24px;height:1px;background:var(--y);}
+.pulse{width:6px;height:6px;border-radius:50%;background:var(--y);animation:pulse 2s ease infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.4;transform:scale(.7);}}
+h1.hh{
+  font-family:'Oswald',sans-serif;
+  font-size:clamp(48px,7vw,96px);
+  font-weight:700;line-height:.95;
+  letter-spacing:-1px;
+  text-transform:uppercase;
+  margin-bottom:28px;
+}
+h1.hh .acc{color:var(--y);display:block;}
+h1.hh .lt{font-weight:400;color:rgba(255,255,255,.5);}
+.hero-body{font-size:16px;line-height:1.8;color:var(--mu);max-width:440px;margin-bottom:40px;}
+.hacts{display:flex;gap:11px;flex-wrap:wrap;}
+.btn-y{
+  background:var(--y);color:var(--bk);border:none;
+  padding:13px 26px;border-radius:var(--r);
+  font-family:'Inter',sans-serif;font-weight:700;font-size:12.5px;letter-spacing:1px;text-transform:uppercase;
+  cursor:pointer;transition:all .25s;display:inline-flex;align-items:center;gap:8px;
+}
+.btn-y:hover{background:var(--yl);box-shadow:0 6px 22px rgba(245,197,24,.3);transform:translateY(-1px);}
+.btn-out{
+  background:transparent;color:var(--tx);
+  border:1px solid var(--br2);
+  padding:13px 24px;border-radius:var(--r);
+  font-family:'Inter',sans-serif;font-weight:600;font-size:12.5px;letter-spacing:1px;text-transform:uppercase;
+  cursor:pointer;transition:all .25s;
+}
+.btn-out:hover{border-color:var(--y);color:var(--y);}
+.hero-stats{
+  display:flex;gap:0;margin-top:56px;
+  border-top:1px solid var(--br);padding-top:36px;
+}
+.hst{padding:0 32px 0 0;border-right:1px solid var(--br);}
+.hst:first-child{padding-left:0;}
+.hst:last-child{border-right:none;}
+.hstn{font-family:'Oswald',sans-serif;font-size:42px;font-weight:700;color:var(--y);line-height:1;letter-spacing:.5px;}
+.hstl{font-size:10.5px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--mu);margin-top:5px;}
+
+/* HERO RIGHT — service pills */
+.hero-right{
+  display:flex;flex-direction:column;gap:10px;
+  padding-left:2%;
+}
+.hpill{
+  display:flex;align-items:center;gap:14px;
+  background:var(--s1);border:1px solid var(--br);border-radius:12px;
+  padding:16px 20px;
+  transition:all .3s var(--ease);
+  cursor:default;
+  position:relative;overflow:hidden;
+}
+.hpill::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--y);transform:scaleY(0);transform-origin:bottom;transition:transform .3s var(--ease);}
+.hpill:hover{border-color:var(--yb);transform:translateX(4px);}
+.hpill:hover::before{transform:scaleY(1);}
+.hpill-ico{font-size:20px;flex-shrink:0;width:36px;text-align:center;}
+.hpill-t{font-size:15px;font-weight:700;letter-spacing:.1px;}
+.hpill-s{font-size:12.5px;color:var(--mu);margin-top:1px;}
+
+/* ─────────────────── TICKER ─────────────────── */
+.ticker{background:var(--y);overflow:hidden;height:46px;display:flex;align-items:center;}
+.ticker-track{display:flex;align-items:center;gap:0;animation:tick 22s linear infinite;white-space:nowrap;}
+.ticker-track:hover{animation-play-state:paused;}
+@keyframes tick{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+.tick-item{display:inline-flex;align-items:center;gap:10px;padding:0 28px;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--bk);flex-shrink:0;}
+.tick-sep{width:4px;height:4px;border-radius:50%;background:rgba(0,0,0,.25);flex-shrink:0;}
+
+/* ─────────────────── SECTIONS COMMON ─────────────────── */
+section{padding:110px 5.5%;}
+.s-tag{display:inline-flex;align-items:center;gap:9px;font-size:11px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--y);margin-bottom:14px;}
+.s-tag::before{content:'';width:22px;height:1px;background:var(--y);}
+.s-tit{font-family:'Oswald',sans-serif;font-size:clamp(32px,3.8vw,52px);font-weight:700;text-transform:uppercase;letter-spacing:.5px;line-height:1.05;margin-bottom:16px;}
+.s-body{font-size:15px;line-height:1.85;color:var(--mu);max-width:480px;}
+
+/* ─────────────────── SERVICES ─────────────────── */
+#services{background:var(--ink);}
+.svc-top{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:56px;gap:40px;flex-wrap:wrap;}
+.svc-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:1px;
+  background:var(--br);border:1px solid var(--br);border-radius:var(--r3);overflow:hidden;
+}
+.svc{
+  background:var(--ink);padding:32px 28px;
+  display:flex;flex-direction:column;gap:12px;
+  transition:background .25s;position:relative;cursor:default;
+}
+.svc:hover{background:var(--s1);}
+.svc-n{font-size:11px;font-weight:600;letter-spacing:2px;color:var(--y);opacity:.5;}
+.svc-ico{font-size:26px;}
+.svc-t{font-size:16px;font-weight:700;}
+.svc-d{font-size:14px;color:var(--mu);line-height:1.75;}
+.svc-arr{position:absolute;top:26px;right:26px;color:var(--yb);font-size:16px;transition:all .25s;}
+.svc:hover .svc-arr{color:var(--y);transform:translate(2px,-2px);}
+
+/* ─────────────────── ABOUT ─────────────────── */
+#about{background:var(--bk);}
+.abt-grid{display:grid;grid-template-columns:1fr 1fr;gap:90px;align-items:center;}
+.abt-vis{position:relative;}
+.abt-card{background:var(--s1);border:1px solid var(--br);border-radius:var(--r3);padding:40px 36px;}
+.abt-logo{font-family:'Oswald',sans-serif;font-size:72px;font-weight:700;color:var(--y);line-height:1;letter-spacing:2px;text-transform:uppercase;}
+.abt-sub{font-size:9.5px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--mu);margin-top:5px;margin-bottom:28px;}
+.abt-div{height:1px;background:var(--br);margin-bottom:24px;}
+.abt-rows{display:flex;flex-direction:column;gap:16px;}
+.abt-row{display:flex;align-items:flex-start;gap:12px;}
+.abt-ico{width:34px;height:34px;border-radius:7px;background:var(--yd);border:1px solid var(--yb);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;margin-top:1px;}
+.abt-lbl{font-size:9.5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--mu);}
+.abt-val{font-size:13px;font-weight:600;margin-top:2px;line-height:1.5;}
+.abt-badge{
+  position:absolute;bottom:-16px;right:-16px;
+  background:var(--y);border-radius:var(--r2);padding:14px 20px;text-align:center;
+  box-shadow:0 8px 30px rgba(245,197,24,.3);
+}
+.abt-bn{font-family:'Oswald',sans-serif;font-size:38px;font-weight:700;color:var(--bk);line-height:1;letter-spacing:.5px;}
+.abt-bl{font-size:8.5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(0,0,0,.5);}
+.chk-list{list-style:none;display:flex;flex-direction:column;gap:11px;margin:26px 0 32px;}
+.chk-list li{display:flex;align-items:flex-start;gap:10px;font-size:15px;color:var(--tx);line-height:1.65;}
+.chk{width:19px;height:19px;background:var(--yd);border:1px solid var(--yb);border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--y);margin-top:3px;}
+.ph-row{display:flex;flex-direction:column;gap:8px;}
+.ph-chip{display:flex;align-items:center;gap:11px;background:var(--s1);border:1px solid var(--br);border-radius:var(--r);padding:13px 15px;transition:border-color .2s;font-size:14px;font-weight:600;}
+.ph-chip:hover{border-color:var(--yb);}
+.ph-fl{font-size:17px;}
+.ph-lbl{font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--mu);display:block;}
+
+/* ─────────────────── GALLERY ─────────────────── */
+#gallery{background:var(--ink);}
+.gal-top{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:44px;gap:30px;flex-wrap:wrap;}
+.gal-right{display:flex;flex-direction:column;align-items:flex-end;gap:9px;}
+.adm-btn{display:inline-flex;align-items:center;gap:7px;background:var(--s2);border:1px solid var(--br);border-radius:var(--r);padding:9px 14px;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--mu);cursor:pointer;transition:all .2s;}
+.adm-btn:hover{border-color:var(--yb);color:var(--y);}
+.adm-bar{background:var(--yd);border:1px solid var(--yb);border-radius:var(--r);padding:9px 13px;display:flex;align-items:center;justify-content:space-between;gap:16px;font-size:11.5px;}
+.adm-bt{color:var(--y);font-weight:700;}
+.adm-bl{background:none;border:none;font-size:10.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--mu);cursor:pointer;transition:color .2s;}
+.adm-bl:hover{color:var(--y);}
+
+/* masonry-ish grid */
+.gal-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  grid-auto-rows:200px;
+  gap:10px;
+}
+.gal-grid .gc:nth-child(5n+1){grid-column:span 2;grid-row:span 2;}
+.gal-grid .gc:nth-child(5n+4){grid-row:span 2;}
+.gc{border-radius:var(--r2);overflow:hidden;position:relative;background:var(--s2);cursor:pointer;}
+.gc img{width:100%;height:100%;object-fit:cover;transition:transform .6s var(--ease);}
+.gc:hover img{transform:scale(1.07);}
+.gc-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.9) 0%,rgba(0,0,0,.1) 50%,transparent 100%);opacity:0;transition:opacity .3s;display:flex;align-items:flex-end;padding:16px;}
+.gc:hover .gc-ov{opacity:1;}
+.gc-t{font-size:13px;font-weight:700;flex:1;}
+.gc-d{font-size:11px;color:rgba(255,255,255,.55);margin-top:2px;}
+.gc-del{background:rgba(160,30,30,.92);border:none;color:#fff;font-size:9.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:5px 8px;border-radius:5px;cursor:pointer;margin-left:8px;flex-shrink:0;}
+.gal-empty{grid-column:1/-1;padding:64px 0;text-align:center;display:flex;flex-direction:column;align-items:center;gap:12px;}
+.gal-empty-ico{font-size:38px;opacity:.15;}
+.gal-empty-t{font-size:13.5px;color:var(--mu);max-width:280px;line-height:1.8;white-space:pre-line;}
+
+/* ─────────────────── INSTAGRAM ─────────────────── */
+#instagram{background:var(--bk);padding:110px 5.5%;}
+.ig-top{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:40px;flex-wrap:wrap;gap:20px;}
+.ig-follow{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);color:#fff;border:none;padding:11px 20px;border-radius:var(--r);font-weight:700;font-size:12px;letter-spacing:.5px;cursor:pointer;transition:all .25s;}
+.ig-follow:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(220,39,67,.35);}
+.ig-strip{
+  display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;
+  scrollbar-width:none;
+}
+.ig-strip::-webkit-scrollbar{display:none;}
+.ig-post{
+  flex-shrink:0;width:200px;height:200px;border-radius:var(--r2);
+  overflow:hidden;position:relative;cursor:pointer;
+  background:var(--s2);
+}
+.ig-post img{width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease);}
+.ig-post:hover img{transform:scale(1.08);}
+.ig-post-ov{
+  position:absolute;inset:0;
+  background:rgba(0,0,0,.55);
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;transition:opacity .25s;
+  font-size:22px;
+}
+.ig-post:hover .ig-post-ov{opacity:1;}
+.ig-placeholder{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:8px;color:var(--mu);font-size:12px;
+}
+.ig-ph-ico{font-size:28px;opacity:.3;}
+.ig-cta-row{margin-top:28px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+.ig-cta-lbl{font-size:13px;color:var(--mu);}
+.ig-handle{font-size:13.5px;font-weight:700;color:var(--y);}
+
+/* ─────────────────── CONTACT ─────────────────── */
+#contact{background:var(--ink);}
+.con-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start;}
+.con-methods{display:flex;flex-direction:column;gap:9px;margin-top:30px;}
+.con-m{display:flex;align-items:center;gap:13px;background:var(--s1);border:1px solid var(--br);border-radius:var(--r);padding:15px 17px;transition:all .2s;}
+.con-m:hover{border-color:var(--yb);transform:translateX(3px);}
+.con-m-ico{width:36px;height:36px;border-radius:7px;background:var(--yd);border:1px solid var(--yb);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.con-m-lbl{font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--mu);}
+.con-m-val{font-size:14.5px;font-weight:700;margin-top:2px;}
+.cbox{background:var(--s1);border:1px solid var(--br);border-radius:var(--r3);padding:36px 32px;}
+.cbox-t{font-family:'Oswald',sans-serif;font-size:24px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:20px;}
+.fg{display:flex;flex-direction:column;gap:7px;margin-bottom:13px;}
+.flbl{font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--mu);}
+.fin{width:100%;background:var(--s2);border:1px solid var(--br);border-radius:var(--r);padding:12px 14px;color:var(--wh);font-size:15px;font-family:'Inter',sans-serif;outline:none;transition:border .2s;}
+.fin:focus{border-color:var(--yb);}
+textarea.fin{resize:vertical;min-height:90px;}
+.frow2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.csub{width:100%;background:var(--y);color:var(--bk);border:none;padding:14px;border-radius:var(--r);font-family:'Inter',sans-serif;font-weight:700;font-size:14px;letter-spacing:.5px;text-transform:uppercase;cursor:pointer;transition:all .2s;display:block;text-align:center;margin-top:4px;}
+.csub:hover{background:var(--yl);box-shadow:0 0 20px rgba(245,197,24,.25);}
+
+/* ─────────────────── MODAL ─────────────────── */
+.movl{position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:700;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(12px);opacity:0;pointer-events:none;transition:opacity .25s;}
+.movl.on{opacity:1;pointer-events:all;}
+.modal{background:var(--s1);border:1px solid var(--br2);border-radius:var(--r3);padding:40px 36px;width:100%;max-width:460px;position:relative;max-height:90vh;overflow-y:auto;}
+.mcl{position:absolute;top:12px;right:12px;background:none;border:none;color:var(--mu);font-size:18px;cursor:pointer;width:30px;height:30px;display:flex;align-items:center;justify-content:center;border-radius:6px;transition:all .2s;}
+.mcl:hover{background:var(--s2);color:var(--wh);}
+.mtit{font-family:'Oswald',sans-serif;font-size:28px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;}
+.msub{font-size:14px;color:var(--mu);line-height:1.7;margin-bottom:24px;}
+.ferr{font-size:11px;color:#f07070;margin-top:4px;}
+.uzn{border:1.5px dashed var(--br);border-radius:var(--r);padding:30px 20px;text-align:center;cursor:pointer;transition:all .25s;margin-bottom:12px;}
+.uzn:hover,.uzn.drag{border-color:var(--y);background:var(--yd);}
+.uzn-ico{font-size:32px;opacity:.4;margin-bottom:7px;}
+.uzn-t{font-size:12.5px;color:var(--mu);}
+.uzn-h{font-size:10.5px;color:var(--mu);opacity:.55;margin-top:3px;}
+.pst{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:12px;}
+.pth{width:62px;height:62px;object-fit:cover;border-radius:6px;border:2px solid var(--y);}
+.mok{width:100%;background:var(--y);color:var(--bk);border:none;padding:13px;border-radius:var(--r);font-weight:700;font-size:12px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:all .2s;margin-top:4px;}
+.mok:hover{background:var(--yl);}
+.mok:disabled{opacity:.35;cursor:not-allowed;}
+
+/* ─────────────────── FOOTER ─────────────────── */
+footer{background:var(--s1);border-top:1px solid var(--br);padding:56px 5.5% 28px;}
+.ft-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:44px;margin-bottom:40px;}
+.ft-logo{font-family:'Oswald',sans-serif;font-size:24px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;}
+.ft-desc{font-size:14px;color:var(--mu);line-height:1.8;max-width:240px;}
+.ft-ct{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--y);margin-bottom:14px;}
+.ft-lks{list-style:none;display:flex;flex-direction:column;gap:10px;}
+.ft-lks a{font-size:14px;color:var(--mu);transition:color .2s;}
+.ft-lks a:hover{color:var(--y);}
+.ft-bot{border-top:1px solid var(--br);padding-top:20px;display:flex;justify-content:space-between;align-items:center;font-size:12.5px;color:var(--mu);flex-wrap:wrap;gap:8px;}
+
+/* ─────────────────── TOAST ─────────────────── */
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(12px);background:var(--s1);border:1px solid var(--yb);color:var(--y);font-size:12.5px;font-weight:700;padding:12px 20px;border-radius:var(--r);opacity:0;transition:all .3s;z-index:9999;pointer-events:none;white-space:nowrap;}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* ─────────────────── WA FLOAT ─────────────────── */
+.waf{position:fixed;bottom:28px;right:28px;z-index:400;width:50px;height:50px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 4px 18px rgba(37,211,102,.4);transition:all .25s;}
+.waf:hover{transform:scale(1.1);box-shadow:0 6px 26px rgba(37,211,102,.55);}
+
+/* ─────────────────── RESPONSIVE ─────────────────── */
+@media(max-width:1024px){
+  .hero-inner{grid-template-columns:1fr;}
+  .hero-right{display:none;}
+  .hero-left{padding-right:0;}
+}
+@media(max-width:960px){
+  .svc-grid{grid-template-columns:repeat(2,1fr);}
+  .abt-grid{grid-template-columns:1fr;gap:48px;}
+  .abt-vis{order:-1;}
+  .abt-badge{bottom:-12px;right:0;}
+  .con-grid{grid-template-columns:1fr;}
+  .ft-grid{grid-template-columns:1fr 1fr;}
+  .gal-grid{grid-template-columns:repeat(2,1fr);grid-auto-rows:180px;}
+  .gal-grid .gc:nth-child(5n+1){grid-column:span 1;grid-row:span 1;}
+  .gal-grid .gc:nth-child(5n+4){grid-row:span 1;}
+  .nlinks{display:none;}
+  .hbg{display:flex;}
+  /* disable cursor on touch */
+  .cur{display:none;}
+}
+@media(max-width:640px){
+  html{font-size:15px;}
+  nav{padding:0 4.5%;height:62px;}
+  section,#instagram{padding:72px 4.5%;}
+  footer{padding:52px 4.5% 28px;}
+
+  /* hero */
+  #hero{padding:90px 4.5% 64px;min-height:auto;}
+  h1.hh{font-size:clamp(38px,11vw,58px);letter-spacing:-.5px;}
+  .hero-eyebrow{font-size:10px;margin-bottom:20px;}
+  .hero-body{font-size:15px;margin-bottom:32px;}
+  .hacts{flex-direction:column;gap:10px;}
+  .btn-y,.btn-out{width:100%;justify-content:center;padding:15px 20px;font-size:14px;}
+  .hero-stats{flex-wrap:wrap;row-gap:20px;margin-top:40px;padding-top:28px;}
+  .hst{padding:0 24px 0 0;min-width:46%;}
+  .hst:nth-child(even){border-right:none;}
+  .hstn{font-size:34px;}
+  .hstl{font-size:10px;}
+
+  /* ticker */
+  .ticker{height:40px;}
+  .tick-item{font-size:11px;padding:0 18px;}
+
+  /* services */
+  .svc-grid{grid-template-columns:1fr;}
+  .svc-top{flex-direction:column;align-items:flex-start;gap:16px;}
+  .svc{padding:26px 22px;}
+  .svc-t{font-size:16px;}
+  .svc-d{font-size:14px;}
+
+  /* about */
+  .abt-card{padding:30px 24px;}
+  .abt-logo{font-size:54px;}
+  .abt-badge{bottom:-10px;right:0;padding:12px 16px;}
+  .abt-bn{font-size:30px;}
+  .s-tit{font-size:clamp(28px,8vw,40px);letter-spacing:.5px;}
+  .s-body{font-size:15px;}
+  .chk-list li{font-size:15px;}
+
+  /* gallery */
+  .gal-top{flex-direction:column;align-items:flex-start;gap:14px;}
+  .gal-right{align-items:flex-start;width:100%;}
+  .adm-bar{width:100%;}
+  .gal-grid{grid-template-columns:repeat(2,1fr);grid-auto-rows:140px;gap:8px;}
+
+  /* instagram */
+  .ig-top{flex-direction:column;align-items:flex-start;gap:16px;}
+  .ig-follow{width:100%;justify-content:center;}
+  .ig-post{width:160px;height:160px;}
+
+  /* contact */
+  .frow2{grid-template-columns:1fr;}
+  .fin{font-size:16px;padding:13px 14px;}/* 16px prevents iOS zoom */
+  .cbox{padding:26px 20px;}
+  .con-m{padding:13px 14px;}
+  .con-m-val{font-size:14px;}
+
+  /* footer */
+  .ft-grid{grid-template-columns:1fr;}
+  .ft-bot{flex-direction:column;text-align:center;gap:6px;}
+
+  /* modal */
+  .modal{padding:28px 20px;}
+  .movl{align-items:flex-end;}
+  .modal{border-radius:var(--r3) var(--r3) 0 0;}
+
+  /* wa float */
+  .waf{bottom:20px;right:16px;width:48px;height:48px;font-size:20px;}
+
+  /* toast */
+  .toast{white-space:normal;text-align:center;max-width:80vw;bottom:24px;}
+}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<div class="cur cur-dot" id="cd"></div>
+<div class="cur cur-ring" id="cr"></div>
+
+<script type="text/babel">
+
+/* ══ TRANSLATIONS ══ */
+const T={
+es:{
+  nav:{srv:"Servicios",abt:"Nosotros",gal:"Proyectos",ig:"Instagram",con:"Contacto",cta:"Presupuesto"},
+  hero:{eye:"Más de 20 años de experiencia",h1:"AGUSTÍN",h2:"SERVICIOS",h3:"GENERALES",
+    body:"Electricidad y servicios generales en Málaga, Costa del Sol y Algarve. Rápidos, confiables y disponibles 24h.",
+    c1:"Pedir Presupuesto",c2:"Ver Proyectos",
+    s1n:"20+",s1l:"Años",s2n:"500+",s2l:"Proyectos",s3n:"24H",s3l:"Urgencias"},
+  tick:["Electricidad","Canalización","Pintura","Montaje de Muebles","Electrodomésticos","Termos & Acumuladores"],
+  srv:{tag:"Servicios",tit:"Lo que hacemos",body:"Soluciones completas para hogares y negocios. Calidad garantizada.",
+    list:[
+      {i:"⚡",t:"Electricidad",d:"Instalaciones, cuadros eléctricos, averías urgentes y mantenimiento."},
+      {i:"🔧",t:"Canalización",d:"Fugas, instalación de sanitarios, tuberías y sistemas de agua."},
+      {i:"🪣",t:"Pintura",d:"Interior y exterior. Preparación de superficies y acabados de calidad."},
+      {i:"🛋️",t:"Montaje",d:"Montaje profesional de todo tipo de mobiliario doméstico y de oficina."},
+      {i:"🔌",t:"Electrodomésticos",d:"Reparación e instalación de electrodomésticos del hogar y hostelería."},
+      {i:"🚿",t:"Termos",d:"Instalación, mantenimiento y sustitución de termos y calentadores."},
+    ]},
+  abt:{tag:"Nosotros",tit:"Profesionalismo\nen cada obra",
+    body:"Más de 20 años en Málaga, Costa del Sol y Algarve. Seriedad, puntualidad y calidad en cada proyecto.",
+    list:["Presupuesto gratuito sin compromiso","Atención inmediata 24 horas","Más de 20 años certificados","Precios justos y transparentes","Cobertura en toda la Costa del Sol y Algarve"],
+    ph_es:{f:"🇪🇸",l:"España — WhatsApp",v:"+34 667 77 46 48",h:"https://wa.me/34667774648"},
+    ph_pt:{f:"🇵🇹",l:"Portugal — WhatsApp",v:"+351 927 418 705",h:"https://wa.me/351927418705"},
+    loc:{i:"📍",l:"Zona de cobertura",v:"Málaga · Costa del Sol · Algarve"},
+    hrs:{i:"🕐",l:"Urgencias",v:"24h · 7 días a la semana"}},
+  gal:{tag:"Proyectos",tit:"Nuestros trabajos",body:"Cada obra habla por sí sola.",
+    adm:"Área admin",loginTit:"Acceso administrador",loginSub:"Exclusivo para el equipo de Agustín Servicios Generales.",
+    loginLbl:"Contraseña",loginPh:"Contraseña…",loginErr:"Contraseña incorrecta.",loginBtn:"Entrar",
+    upTit:"Nuevo proyecto",upSub:"Las fotos aparecerán en la galería.",
+    uzn:"Clic o arrastra aquí",uznh:"JPG · PNG · WEBP — máx. 10 MB",
+    fTit:"Título *",fDesc:"Descripción",fDate:"Fecha",
+    phTit:"Ej: Instalación eléctrica — Marbella",phDesc:"Describe el trabajo…",
+    sub:"Publicar",subbing:"Publicando…",toast:"Proyecto publicado ✓",
+    logged:"Sesión activa",logout:"Salir",
+    empty:"Sin proyectos aún.\nInicia sesión para añadir el primero.",del:"Eliminar"},
+  ig:{tag:"Instagram",tit:"@servicosgerais__",body:"Síguenos para ver nuestros últimos trabajos.",
+    follow:"Seguir en Instagram",cta:"Ver perfil completo"},
+  con:{tag:"Contacto",tit:"Hablemos",body:"Llámanos o escríbenos. Siempre respondemos rápido.",
+    ms:[{i:"📞",l:"España · WhatsApp",v:"+34 667 77 46 48",h:"https://wa.me/34667774648"},
+        {i:"📞",l:"Portugal · WhatsApp",v:"+351 927 418 705",h:"https://wa.me/351927418705"},
+        {i:"📍",l:"Zona de servicio",v:"Málaga · Costa del Sol · Algarve",h:"#"},
+        {i:"⏰",l:"Urgencias",v:"24h · 7 días a la semana",h:"#"}],
+    ft:"Envíanos un mensaje",
+    fN:"Nombre",fP:"Teléfono",fS:"Servicio",fM:"Mensaje",
+    phN:"Tu nombre",phP:"Tu número",phS:"¿Qué necesitas?",phM:"Describe el trabajo…",
+    sub:"Enviar por WhatsApp"},
+  foot:{desc:"Electricidad y servicios generales en Málaga, Costa del Sol y Algarve.",
+    n1:"Navegación",n2:"Contacto",r:"Todos los derechos reservados."}
+},
+pt:{
+  nav:{srv:"Serviços",abt:"Sobre nós",gal:"Projetos",ig:"Instagram",con:"Contacto",cta:"Orçamento"},
+  hero:{eye:"Mais de 20 anos de experiência",h1:"AGUSTÍN",h2:"SERVIÇOS",h3:"GERAIS",
+    body:"Eletricidade e serviços gerais em Málaga, Costa del Sol e Algarve. Rápidos, confiáveis e disponíveis 24h.",
+    c1:"Pedir Orçamento",c2:"Ver Projetos",
+    s1n:"20+",s1l:"Anos",s2n:"500+",s2l:"Projetos",s3n:"24H",s3l:"Urgências"},
+  tick:["Eletricidade","Canalização","Pintura","Montagem de Móveis","Eletrodomésticos","Termos & Acumuladores"],
+  srv:{tag:"Serviços",tit:"O que fazemos",body:"Soluções completas para casas e negócios. Qualidade garantida.",
+    list:[
+      {i:"⚡",t:"Eletricidade",d:"Instalações, quadros elétricos, avarias urgentes e manutenção."},
+      {i:"🔧",t:"Canalização",d:"Fugas, instalação de sanitários, canos e sistemas de água."},
+      {i:"🪣",t:"Pintura",d:"Interior e exterior. Preparação de superfícies e acabamentos de qualidade."},
+      {i:"🛋️",t:"Montagem",d:"Montagem profissional de todo o tipo de mobiliário doméstico e de escritório."},
+      {i:"🔌",t:"Eletrodomésticos",d:"Reparação e instalação de eletrodomésticos e de hotelaria."},
+      {i:"🚿",t:"Termos",d:"Instalação, manutenção e substituição de esquentadores e acumuladores."},
+    ]},
+  abt:{tag:"Sobre nós",tit:"Profissionalismo\nem cada obra",
+    body:"Mais de 20 anos em Málaga, Costa del Sol e Algarve. Seriedade, pontualidade e qualidade em cada projeto.",
+    list:["Orçamento gratuito sem compromisso","Atendimento imediato 24 horas","Mais de 20 anos certificados","Preços justos e transparentes","Cobertura em toda a Costa del Sol e Algarve"],
+    ph_es:{f:"🇪🇸",l:"Espanha — WhatsApp",v:"+34 667 77 46 48",h:"https://wa.me/34667774648"},
+    ph_pt:{f:"🇵🇹",l:"Portugal — WhatsApp",v:"+351 927 418 705",h:"https://wa.me/351927418705"},
+    loc:{i:"📍",l:"Zona de cobertura",v:"Málaga · Costa del Sol · Algarve"},
+    hrs:{i:"🕐",l:"Urgências",v:"24h · 7 dias por semana"}},
+  gal:{tag:"Projetos",tit:"Os nossos trabalhos",body:"Cada obra fala por si.",
+    adm:"Área admin",loginTit:"Acesso administrador",loginSub:"Exclusivo para a equipa de Agustín Servicios Generales.",
+    loginLbl:"Palavra-passe",loginPh:"Palavra-passe…",loginErr:"Palavra-passe incorreta.",loginBtn:"Entrar",
+    upTit:"Novo projeto",upSub:"As fotos aparecerão na galeria.",
+    uzn:"Clica ou arrasta aqui",uznh:"JPG · PNG · WEBP — máx. 10 MB",
+    fTit:"Título *",fDesc:"Descrição",fDate:"Data",
+    phTit:"Ex: Instalação elétrica — Faro",phDesc:"Descreve o trabalho…",
+    sub:"Publicar",subbing:"A publicar…",toast:"Projeto publicado ✓",
+    logged:"Sessão ativa",logout:"Sair",
+    empty:"Sem projetos ainda.\nInicia sessão para adicionar o primeiro.",del:"Eliminar"},
+  ig:{tag:"Instagram",tit:"@servicosgerais__",body:"Segue-nos para ver os nossos últimos trabalhos.",
+    follow:"Seguir no Instagram",cta:"Ver perfil completo"},
+  con:{tag:"Contacto",tit:"Fala connosco",body:"Liga ou escreve-nos. Respondemos sempre rápido.",
+    ms:[{i:"📞",l:"Espanha · WhatsApp",v:"+34 667 77 46 48",h:"https://wa.me/34667774648"},
+        {i:"📞",l:"Portugal · WhatsApp",v:"+351 927 418 705",h:"https://wa.me/351927418705"},
+        {i:"📍",l:"Zona de serviço",v:"Málaga · Costa del Sol · Algarve",h:"#"},
+        {i:"⏰",l:"Urgências",v:"24h · 7 dias por semana",h:"#"}],
+    ft:"Envia-nos uma mensagem",
+    fN:"Nome",fP:"Telefone",fS:"Serviço",fM:"Mensagem",
+    phN:"O teu nome",phP:"O teu número",phS:"O que precisas?",phM:"Descreve o trabalho…",
+    sub:"Enviar pelo WhatsApp"},
+  foot:{desc:"Eletricidade e serviços gerais em Málaga, Costa del Sol e Algarve.",
+    n1:"Navegação",n2:"Contacto",r:"Todos os direitos reservados."}
+},
+en:{
+  nav:{srv:"Services",abt:"About",gal:"Projects",ig:"Instagram",con:"Contact",cta:"Get a Quote"},
+  hero:{eye:"Over 20 years of experience",h1:"AGUSTÍN",h2:"GENERAL",h3:"SERVICES",
+    body:"Electrical and general services in Málaga, Costa del Sol and Algarve. Fast, reliable, available 24h.",
+    c1:"Get a Quote",c2:"See Projects",
+    s1n:"20+",s1l:"Years",s2n:"500+",s2l:"Projects",s3n:"24H",s3l:"Emergencies"},
+  tick:["Electrical","Plumbing","Painting","Furniture Assembly","Appliances","Water Heaters"],
+  srv:{tag:"Services",tit:"What we do",body:"Complete solutions for homes and businesses. Quality guaranteed.",
+    list:[
+      {i:"⚡",t:"Electrical",d:"Installations, fuse boxes, urgent faults and maintenance."},
+      {i:"🔧",t:"Plumbing",d:"Leak repairs, sanitary fitting, pipework and water systems."},
+      {i:"🪣",t:"Painting",d:"Interior and exterior. Surface preparation and quality finishes."},
+      {i:"🛋️",t:"Assembly",d:"Professional assembly of all types of domestic and office furniture."},
+      {i:"🔌",t:"Appliances",d:"Repair and installation of household and commercial appliances."},
+      {i:"🚿",t:"Water Heaters",d:"Installation, maintenance and replacement of water heaters."},
+    ]},
+  abt:{tag:"About",tit:"Professionalism\non every job",
+    body:"Over 20 years across Málaga, Costa del Sol and Algarve. Reliability, punctuality and quality on every project.",
+    list:["Free no-obligation quote","Immediate 24-hour service","Over 20 certified years","Fair and transparent pricing","Full coverage across Costa del Sol and Algarve"],
+    ph_es:{f:"🇪🇸",l:"Spain — WhatsApp",v:"+34 667 77 46 48",h:"https://wa.me/34667774648"},
+    ph_pt:{f:"🇵🇹",l:"Portugal — WhatsApp",v:"+351 927 418 705",h:"https://wa.me/351927418705"},
+    loc:{i:"📍",l:"Service area",v:"Málaga · Costa del Sol · Algarve"},
+    hrs:{i:"🕐",l:"Emergencies",v:"24h · 7 days a week"}},
+  gal:{tag:"Projects",tit:"Our work",body:"Every job speaks for itself.",
+    adm:"Admin area",loginTit:"Admin access",loginSub:"Exclusive to the Agustín General Services team.",
+    loginLbl:"Password",loginPh:"Password…",loginErr:"Incorrect password.",loginBtn:"Sign in",
+    upTit:"New project",upSub:"Photos will appear in the gallery.",
+    uzn:"Click or drag here",uznh:"JPG · PNG · WEBP — max 10 MB",
+    fTit:"Title *",fDesc:"Description",fDate:"Date",
+    phTit:"e.g. Electrical installation — Marbella",phDesc:"Describe the work…",
+    sub:"Publish",subbing:"Publishing…",toast:"Project published ✓",
+    logged:"Active session",logout:"Sign out",
+    empty:"No projects yet.\nSign in to add the first one.",del:"Delete"},
+  ig:{tag:"Instagram",tit:"@servicosgerais__",body:"Follow us to see our latest work.",
+    follow:"Follow on Instagram",cta:"View full profile"},
+  con:{tag:"Contact",tit:"Let's talk",body:"Call or message us. We always reply promptly.",
+    ms:[{i:"📞",l:"Spain · WhatsApp",v:"+34 667 77 46 48",h:"https://wa.me/34667774648"},
+        {i:"📞",l:"Portugal · WhatsApp",v:"+351 927 418 705",h:"https://wa.me/351927418705"},
+        {i:"📍",l:"Service area",v:"Málaga · Costa del Sol · Algarve",h:"#"},
+        {i:"⏰",l:"Emergencies",v:"24h · 7 days a week",h:"#"}],
+    ft:"Send us a message",
+    fN:"Name",fP:"Phone",fS:"Service",fM:"Message",
+    phN:"Your name",phP:"Your number",phS:"What do you need?",phM:"Describe the job…",
+    sub:"Send via WhatsApp"},
+  foot:{desc:"Electrical and general services in Málaga, Costa del Sol and Algarve.",
+    n1:"Navigation",n2:"Contact",r:"All rights reserved."}
+}};
+
+const PASS="agustin2024";
+const IG_URL="https://www.instagram.com/servicosgerais__/";
+
+/* ══ REVEAL HOOK ══ */
+function useReveal(){
+  React.useEffect(()=>{
+    const els=document.querySelectorAll('.reveal,.reveal-l,.reveal-r');
+    const io=new IntersectionObserver(entries=>{
+      entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in');});
+    },{threshold:0.12});
+    els.forEach(el=>io.observe(el));
+    return()=>io.disconnect();
+  },[]);
+}
+
+/* ══ CONTACT FORM ══ */
+function CForm({t}){
+  const [n,sn]=React.useState('');
+  const [p,sp]=React.useState('');
+  const [s,ss]=React.useState('');
+  const [m,sm]=React.useState('');
+  const send=()=>{
+    const lines=[];
+    if(n)lines.push(`👤 *Nombre:* ${n}`);
+    if(p)lines.push(`📞 *Teléfono:* ${p}`);
+    if(s)lines.push(`🔧 *Servicio:* ${s}`);
+    if(m)lines.push(`💬 *Mensaje:* ${m}`);
+    const txt=lines.length?lines.join('\n'):'Hola, me gustaría obtener un presupuesto.';
+    window.open(`https://wa.me/34667774648?text=${encodeURIComponent(txt)}`,'_blank');
+  };
+  return(
+    <div className="cbox">
+      <div className="cbox-t">{t.con.ft}</div>
+      <div className="frow2">
+        <div className="fg"><label className="flbl">{t.con.fN}</label><input className="fin" type="text" placeholder={t.con.phN} value={n} onChange={e=>sn(e.target.value)}/></div>
+        <div className="fg"><label className="flbl">{t.con.fP}</label><input className="fin" type="tel" placeholder={t.con.phP} value={p} onChange={e=>sp(e.target.value)}/></div>
+      </div>
+      <div className="fg"><label className="flbl">{t.con.fS}</label><input className="fin" type="text" placeholder={t.con.phS} value={s} onChange={e=>ss(e.target.value)}/></div>
+      <div className="fg"><label className="flbl">{t.con.fM}</label><textarea className="fin" placeholder={t.con.phM} value={m} onChange={e=>sm(e.target.value)}/></div>
+      <button className="csub" onClick={send}>{t.con.sub}</button>
+    </div>
+  );
+}
+
+/* ══ APP ══ */
+function App(){
+  const [lang,sLang]=React.useState('es');
+  const [menu,sMenu]=React.useState(false);
+  const [scr,sScr]=React.useState(false);
+  const [modal,sModal]=React.useState('');
+  const [pw,sPw]=React.useState('');
+  const [pwErr,sPwErr]=React.useState(false);
+  const [admin,sAdmin]=React.useState(false);
+  const [photos,sPhotos]=React.useState([]);
+  const [files,sFiles]=React.useState([]);
+  const [utit,sUtit]=React.useState('');
+  const [udesc,sUdesc]=React.useState('');
+  const [udate,sUdate]=React.useState('');
+  const [busy,sBusy]=React.useState(false);
+  const [drag,sDrag]=React.useState(false);
+  const [toast,sToast]=React.useState('');
+  const fref=React.useRef();
+  const t=T[lang];
+
+  useReveal();
+
+  /* scroll nav */
+  React.useEffect(()=>{
+    const h=()=>sScr(window.scrollY>40);
+    window.addEventListener('scroll',h,{passive:true});
+    return()=>window.removeEventListener('scroll',h);
+  },[]);
+
+  /* cursor */
+  React.useEffect(()=>{
+    const cd=document.getElementById('cd');
+    const cr=document.getElementById('cr');
+    if(!cd||!cr)return;
+    let mx=0,my=0,rx=0,ry=0;
+    const mv=e=>{mx=e.clientX;my=e.clientY;cd.style.left=mx+'px';cd.style.top=my+'px';};
+    const anim=()=>{rx+=(mx-rx)*.12;ry+=(my-ry)*.12;cr.style.left=rx+'px';cr.style.top=ry+'px';requestAnimationFrame(anim);};
+    window.addEventListener('mousemove',mv);
+    anim();
+    return()=>window.removeEventListener('mousemove',mv);
+  },[]);
+
+  /* re-run reveals on lang change */
+  React.useEffect(()=>{
+    setTimeout(()=>{
+      document.querySelectorAll('.reveal,.reveal-l,.reveal-r').forEach(el=>{
+        const rect=el.getBoundingClientRect();
+        if(rect.top<window.innerHeight*0.9)el.classList.add('in');
+      });
+    },50);
+  },[lang]);
+
+  const go=(id)=>{document.getElementById(id)?.scrollIntoView({behavior:'smooth'});sMenu(false);};
+  const showToast=(m)=>{sToast(m);setTimeout(()=>sToast(''),3000);};
+  const openAdm=()=>{if(admin){sModal('up');}else{sModal('login');sPw('');sPwErr(false);}};
+  const doLogin=()=>{if(pw===PASS){sAdmin(true);sModal('up');sPwErr(false);}else{sPwErr(true);}};
+  const addFiles=(fl)=>sFiles(p=>[...p,...Array.from(fl).filter(f=>f.type.startsWith('image/'))].slice(0,8));
+  const onDrop=(e)=>{e.preventDefault();sDrag(false);addFiles(e.dataTransfer.files);};
+  const doPublish=()=>{
+    if(!files.length||!utit)return;
+    sBusy(true);
+    setTimeout(()=>{
+      sPhotos(p=>[...files.map(f=>({id:Date.now()+Math.random(),url:URL.createObjectURL(f),title:utit,desc:udesc,date:udate||new Date().toLocaleDateString()})),...p]);
+      sFiles([]);sUtit('');sUdesc('');sUdate('');sBusy(false);sModal('');showToast(t.gal.toast);
+    },800);
+  };
+
+  const DEMO_PHOTOS = [
+    {id:'d1', url:'https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?w=800&q=85', title: lang==='pt'?'Quadro Elétrico — Instalação':lang==='en'?'Electrical Panel — Installation':'Cuadro Eléctrico — Instalación', desc:''},
+    {id:'d2', url:'https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=800&q=85', title: lang==='pt'?'Canalização — Sistema de Tubagens':lang==='en'?'Plumbing — Pipe System':'Canalización — Sistema de Tuberías', desc:''},
+    {id:'d3', url:'https://images.unsplash.com/photo-1562259949-e8e7689d7828?w=800&q=85', title: lang==='pt'?'Pintura de Interiores':lang==='en'?'Interior Painting':'Pintura de Interiores', desc:''},
+    {id:'d4', url:'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=800&q=85', title: lang==='pt'?'Instalação Elétrica — Cablagem':lang==='en'?'Electrical Wiring — Installation':'Instalación Eléctrica — Cableado', desc:''},
+    {id:'d5', url:'https://images.unsplash.com/photo-1572981779307-38b8cabb2407?w=800&q=85', title: lang==='pt'?'Ferramentas Profissionais':lang==='en'?'Professional Tools':'Herramientas Profesionales', desc:''},
+    {id:'d6', url:'https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=800&q=85', title: lang==='pt'?'Equipamento de Obra':lang==='en'?'Work Equipment':'Equipamiento de Obra', desc:''},
+    {id:'d7', url:'https://images.unsplash.com/photo-1513828583688-c52646db42da?w=800&q=85', title: lang==='pt'?'Quadro Elétrico — Interior':lang==='en'?'Electrical Panel — Interior':'Cuadro Eléctrico — Interior', desc:''},
+    {id:'d8', url:'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=800&q=85', title: lang==='pt'?'Pintura — Materiais e Acabamentos':lang==='en'?'Painting — Materials & Finishes':'Pintura — Materiales y Acabados', desc:''},
+  ];
+  const allPhotos = [...photos, ...(photos.length < DEMO_PHOTOS.length ? DEMO_PHOTOS.slice(photos.length) : [])];
+
+
+  const tickItems=[...t.tick,...t.tick];
+
+  return(<>
+  {/* ── NAV ── */}
+  <nav className={scr?'scr':''}>
+    <div className="nlogo" onClick={()=>go('hero')}>
+      <div className="nmark">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" fill="#060606"/>
+        </svg>
+      </div>
+      <div><div className="nname">Agustín</div><div className="ntag">Servicios Generales</div></div>
+    </div>
+    <ul className="nlinks">
+      {[['services',t.nav.srv],['about',t.nav.abt],['gallery',t.nav.gal],['instagram',t.nav.ig],['contact',t.nav.con]].map(([id,lb])=>(
+        <li key={id}><a href={`#${id}`} onClick={e=>{e.preventDefault();go(id);}}>{lb}</a></li>
+      ))}
+    </ul>
+    <div className="nright">
+      <div className="lsw">{['es','pt','en'].map(l=><button key={l} className={`lb${lang===l?' on':''}`} onClick={()=>sLang(l)}>{l.toUpperCase()}</button>)}</div>
+      <button className="ncta" onClick={()=>go('contact')}>{t.nav.cta}</button>
+      <button className="hbg" onClick={()=>sMenu(true)}><span/><span/><span/></button>
+    </div>
+  </nav>
+
+  {/* ── MOBILE MENU ── */}
+  <div className={`mmenu${menu?' on':''}`}>
+    <button className="mclose" onClick={()=>sMenu(false)}>✕</button>
+    {[['services',t.nav.srv],['about',t.nav.abt],['gallery',t.nav.gal],['instagram',t.nav.ig],['contact',t.nav.con]].map(([id,lb])=>(
+      <a key={id} className="mlink" href={`#${id}`} onClick={e=>{e.preventDefault();go(id);}}>{lb}</a>
+    ))}
+    <div className="lsw" style={{marginTop:28}}>{['es','pt','en'].map(l=><button key={l} className={`lb${lang===l?' on':''}`} onClick={()=>{sLang(l);sMenu(false);}}>{l.toUpperCase()}</button>)}</div>
+  </div>
+
+  {/* ── HERO ── */}
+  <section id="hero">
+    <div className="hero-bg-img"/>
+    <div className="hero-orb"/><div className="hero-orb2"/>
+    <div className="hero-lines"/>
+    <div className="hero-inner">
+      <div className="hero-left">
+        <div className="hero-eyebrow reveal"><div className="pulse"/>{t.hero.eye}</div>
+        <h1 className="hh reveal d1">
+          <span className="lt">{t.hero.h1}</span>
+          <span className="acc">{t.hero.h2}</span>
+          <span className="lt">{t.hero.h3}</span>
+        </h1>
+        <p className="hero-body reveal d2">{t.hero.body}</p>
+        <div className="hacts reveal d3">
+          <a className="btn-y" href="https://wa.me/34667774648" target="_blank" rel="noreferrer">{t.hero.c1}</a>
+          <button className="btn-out" onClick={()=>go('gallery')}>{t.hero.c2}</button>
+        </div>
+        <div className="hero-stats reveal d4">
+          {[[t.hero.s1n,t.hero.s1l],[t.hero.s2n,t.hero.s2l],[t.hero.s3n,t.hero.s3l]].map(([n,l],i)=>(
+            <div className="hst" key={i} style={i===0?{paddingLeft:0}:{}}>
+              <div className="hstn">{n}</div><div className="hstl">{l}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="hero-right">
+        {t.srv.list.map((s,i)=>(
+          <div className={`hpill reveal d${i+1}`} key={i}>
+            <div className="hpill-ico">{s.i}</div>
+            <div><div className="hpill-t">{s.t}</div><div className="hpill-s">{s.d.split('.')[0]}.</div></div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {/* ── TICKER ── */}
+  <div className="ticker">
+    <div className="ticker-track">
+      {tickItems.map((item,i)=>(
+        <React.Fragment key={i}>
+          <div className="tick-item"><span>⚡</span><span>{item}</span></div>
+          <div className="tick-sep"/>
+        </React.Fragment>
+      ))}
+    </div>
+  </div>
+
+  {/* ── SERVICES ── */}
+  <section id="services" style={{background:'var(--ink)'}}>
+    <div className="svc-top">
+      <div><div className="s-tag reveal">{t.srv.tag}</div><h2 className="s-tit reveal d1">{t.srv.tit}</h2></div>
+      <p className="s-body reveal d2">{t.srv.body}</p>
+    </div>
+    <div className="svc-grid">
+      {t.srv.list.map((s,i)=>(
+        <div className={`svc reveal d${(i%3)+1}`} key={i}>
+          <div className="svc-n">0{i+1}</div>
+          <div className="svc-ico">{s.i}</div>
+          <div className="svc-t">{s.t}</div>
+          <div className="svc-d">{s.d}</div>
+          <div className="svc-arr">→</div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  {/* ── ABOUT ── */}
+  <section id="about" style={{background:'var(--bk)'}}>
+    <div className="abt-grid">
+      <div className="abt-vis reveal-l">
+        <div className="abt-card">
+          <div className="abt-logo">AG</div>
+          <div className="abt-sub">Servicios Generales</div>
+          <div className="abt-div"/>
+          <div className="abt-rows">
+            {[t.abt.ph_es,t.abt.ph_pt].map((p,i)=>(
+              <div className="abt-row" key={i}>
+                <div className="abt-ico" style={{fontSize:16}}>{p.f}</div>
+                <div><div className="abt-lbl">{p.l}</div><div className="abt-val">{p.v}</div></div>
+              </div>
+            ))}
+            <div className="abt-row"><div className="abt-ico">{t.abt.loc.i}</div><div><div className="abt-lbl">{t.abt.loc.l}</div><div className="abt-val">{t.abt.loc.v}</div></div></div>
+            <div className="abt-row"><div className="abt-ico">{t.abt.hrs.i}</div><div><div className="abt-lbl">{t.abt.hrs.l}</div><div className="abt-val">{t.abt.hrs.v}</div></div></div>
+          </div>
+        </div>
+        <div className="abt-badge"><div className="abt-bn">20+</div><div className="abt-bl">{lang==='en'?'Years':lang==='pt'?'Anos':'Años'}</div></div>
+      </div>
+      <div className="reveal-r">
+        <div className="s-tag">{t.abt.tag}</div>
+        <h2 className="s-tit" style={{whiteSpace:'pre-line'}}>{t.abt.tit}</h2>
+        <p className="s-body">{t.abt.body}</p>
+        <ul className="chk-list">
+          {t.abt.list.map((item,i)=><li key={i}><div className="chk">✓</div><span>{item}</span></li>)}
+        </ul>
+        <div className="ph-row">
+          <a className="ph-chip" href={t.abt.ph_es.h} target="_blank" rel="noreferrer">
+            <span className="ph-fl">{t.abt.ph_es.f}</span><div><span className="ph-lbl">{t.abt.ph_es.l}</span><span>{t.abt.ph_es.v}</span></div>
+          </a>
+          <a className="ph-chip" href={t.abt.ph_pt.h} target="_blank" rel="noreferrer">
+            <span className="ph-fl">{t.abt.ph_pt.f}</span><div><span className="ph-lbl">{t.abt.ph_pt.l}</span><span>{t.abt.ph_pt.v}</span></div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* ── GALLERY ── */}
+  <section id="gallery" style={{background:'var(--ink)'}}>
+    <div className="gal-top">
+      <div><div className="s-tag reveal">{t.gal.tag}</div><h2 className="s-tit reveal d1">{t.gal.tit}</h2><p className="s-body reveal d2">{t.gal.body}</p></div>
+      <div className="gal-right">
+        {admin&&<div className="adm-bar"><span className="adm-bt">🔐 {t.gal.logged}</span><button className="adm-bl" onClick={()=>{sAdmin(false);sModal('');}}>  {t.gal.logout}</button></div>}
+        <button className="adm-btn" onClick={openAdm}>🔐 {t.gal.adm}</button>
+      </div>
+    </div>
+    <div className="gal-grid">
+      {allPhotos.map(item=>(
+        <div className="gc reveal" key={item.id}>
+          <img src={item.url} alt={item.title} loading="lazy"/>
+          <div className="gc-ov">
+            <div style={{flex:1}}><div className="gc-t">{item.title}</div>{item.desc&&<div className="gc-d">{item.desc}</div>}</div>
+            {admin&&!item.id.startsWith('d')&&<button className="gc-del" onClick={()=>sPhotos(p=>p.filter(x=>x.id!==item.id))}>{t.gal.del}</button>}
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  {/* ── INSTAGRAM ── */}
+  <section id="instagram" style={{background:'var(--bk)'}}>
+    <div className="ig-top">
+      <div>
+        <div className="s-tag reveal">{t.ig.tag}</div>
+        <h2 className="s-tit reveal d1">{t.ig.tit}</h2>
+        <p className="s-body reveal d2">{t.ig.body}</p>
+      </div>
+      <a className="ig-follow reveal" href={IG_URL} target="_blank" rel="noreferrer">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        {t.ig.follow}
+      </a>
+    </div>
+    <div className="ig-strip">
+      {[
+        {src:"https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?w=500&q=85", alt:"Cuadro eléctrico"},
+        {src:"https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=500&q=85", alt:"Tuberías"},
+        {src:"https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=500&q=85", alt:"Cableado eléctrico"},
+        {src:"https://images.unsplash.com/photo-1562259949-e8e7689d7828?w=500&q=85", alt:"Pintura"},
+        {src:"https://images.unsplash.com/photo-1572981779307-38b8cabb2407?w=500&q=85", alt:"Herramientas"},
+        {src:"https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=500&q=85", alt:"Equipamiento"},
+      ].map((p,i)=>(
+        <a className="ig-post reveal" key={i} href={IG_URL} target="_blank" rel="noreferrer" style={{transitionDelay:`${i*0.07}s`}}>
+          <img src={p.src} alt={p.alt} loading="lazy"/>
+          <div className="ig-post-ov">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+          </div>
+        </a>
+      ))}
+    </div>
+    <div className="ig-cta-row reveal d3">
+      <span className="ig-cta-lbl">{t.ig.cta} →</span>
+      <a className="ig-handle" href={IG_URL} target="_blank" rel="noreferrer">@servicosgerais__</a>
+    </div>
+  </section>
+
+  {/* ── CONTACT ── */}
+  <section id="contact" style={{background:'var(--ink)'}}>
+    <div className="con-grid">
+      <div>
+        <div className="s-tag reveal">{t.con.tag}</div>
+        <h2 className="s-tit reveal d1">{t.con.tit}</h2>
+        <p className="s-body reveal d2">{t.con.body}</p>
+        <div className="con-methods">
+          {t.con.ms.map((m,i)=>(
+            <a className={`con-m reveal d${i+1}`} href={m.h} key={i} target={m.h.startsWith('http')?'_blank':'_self'} rel="noreferrer">
+              <div className="con-m-ico">{m.i}</div>
+              <div><div className="con-m-lbl">{m.l}</div><div className="con-m-val">{m.v}</div></div>
+            </a>
+          ))}
+        </div>
+      </div>
+      <div className="reveal-r d1"><CForm t={t}/></div>
+    </div>
+  </section>
+
+  {/* ── FOOTER ── */}
+  <footer>
+    <div className="ft-grid">
+      <div>
+        <div className="ft-logo">⚡ Agustín</div>
+        <p className="ft-desc">{t.foot.desc}</p>
+      </div>
+      <div>
+        <div className="ft-ct">{t.foot.n1}</div>
+        <ul className="ft-lks">
+          {[['services',t.nav.srv],['about',t.nav.abt],['gallery',t.nav.gal],['instagram',t.nav.ig],['contact',t.nav.con]].map(([id,lb])=>(
+            <li key={id}><a href={`#${id}`} onClick={e=>{e.preventDefault();go(id);}}>{lb}</a></li>
+          ))}
+        </ul>
+      </div>
+      <div>
+        <div className="ft-ct">{t.foot.n2}</div>
+        <ul className="ft-lks">
+          <li><a href="tel:+34667774648">🇪🇸 +34 667 77 46 48</a></li>
+          <li><a href="tel:+351927418705">🇵🇹 +351 927 418 705</a></li>
+          <li><a href="#">Málaga · Costa del Sol</a></li>
+          <li><a href="#">Algarve, Portugal</a></li>
+        </ul>
+      </div>
+      <div>
+        <div className="ft-ct">Social</div>
+        <ul className="ft-lks">
+          <li><a href={IG_URL} target="_blank" rel="noreferrer">📸 Instagram</a></li>
+          <li><a href="https://wa.me/34667774648" target="_blank" rel="noreferrer">🇪🇸 WhatsApp ES</a></li>
+          <li><a href="https://wa.me/351927418705" target="_blank" rel="noreferrer">🇵🇹 WhatsApp PT</a></li>
+        </ul>
+      </div>
+    </div>
+    <div className="ft-bot">
+      <span>© {new Date().getFullYear()} Agustín Servicios Generales · {t.foot.r}</span>
+      <span>🇪🇸 Málaga · Costa del Sol &nbsp;|&nbsp; 🇵🇹 Algarve</span>
+    </div>
+  </footer>
+
+  {/* ── WA FLOAT ── */}
+  <a className="waf" href="https://wa.me/34667774648" target="_blank" rel="noreferrer" aria-label="WhatsApp">💬</a>
+
+  {/* ── MODAL ── */}
+  <div className={`movl${modal?' on':''}`} onClick={e=>{if(e.target===e.currentTarget)sModal('');}}>
+    <div className="modal">
+      <button className="mcl" onClick={()=>sModal('')}>✕</button>
+      {modal==='login'&&<>
+        <div className="mtit">{t.gal.loginTit}</div>
+        <p className="msub">{t.gal.loginSub}</p>
+        <div className="fg">
+          <label className="flbl">{t.gal.loginLbl}</label>
+          <input className="fin" type="password" placeholder={t.gal.loginPh} value={pw}
+            onChange={e=>{sPw(e.target.value);sPwErr(false);}}
+            onKeyDown={e=>e.key==='Enter'&&doLogin()} autoFocus/>
+          {pwErr&&<div className="ferr">⚠ {t.gal.loginErr}</div>}
+        </div>
+        <button className="mok" onClick={doLogin}>{t.gal.loginBtn}</button>
+      </>}
+      {modal==='up'&&<>
+        <div className="mtit">{t.gal.upTit}</div>
+        <p className="msub">{t.gal.upSub}</p>
+        <div className={`uzn${drag?' drag':''}`}
+          onClick={()=>fref.current.click()}
+          onDragOver={e=>{e.preventDefault();sDrag(true);}}
+          onDragLeave={()=>sDrag(false)}
+          onDrop={onDrop}>
+          <div className="uzn-ico">📸</div>
+          <div className="uzn-t">{t.gal.uzn}</div>
+          <div className="uzn-h">{t.gal.uznh}</div>
+        </div>
+        <input ref={fref} type="file" accept="image/*" multiple style={{display:'none'}} onChange={e=>addFiles(e.target.files)}/>
+        {files.length>0&&<div className="pst">{files.map((f,i)=><img key={i} className="pth" src={URL.createObjectURL(f)} alt="p"/>)}</div>}
+        <div className="fg"><label className="flbl">{t.gal.fTit}</label><input className="fin" type="text" placeholder={t.gal.phTit} value={utit} onChange={e=>sUtit(e.target.value)}/></div>
+        <div className="fg"><label className="flbl">{t.gal.fDesc}</label><textarea className="fin" placeholder={t.gal.phDesc} value={udesc} onChange={e=>sUdesc(e.target.value)}/></div>
+        <div className="fg"><label className="flbl">{t.gal.fDate}</label><input className="fin" type="date" value={udate} onChange={e=>sUdate(e.target.value)}/></div>
+        <button className="mok" onClick={doPublish} disabled={busy||!files.length||!utit}>{busy?t.gal.subbing:t.gal.sub}</button>
+      </>}
+    </div>
+  </div>
+
+  <div className={`toast${toast?' on':''}`}>{toast}</div>
+  </>);
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>
